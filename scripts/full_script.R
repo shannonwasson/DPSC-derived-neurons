@@ -185,3 +185,5 @@ gseaplot2(
   geneSetID = 1,
   title = "NF-kB Signaling Pathway Enrichment"
 )
+
+sessioninfo()

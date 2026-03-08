@@ -43,8 +43,13 @@ which are critical components of the pathway and may contribute to ASD-associate
 Results suggest reduced NF-kB transcriptional signaling in ASD-associated PWS neurons, potentially indicating altered neuronal stress-response pathwyas rather than classical neuroinflammation. 
 
 ## Figures
+Ridgeplot
 ![Ridgeplot](plots/Ridgeplot_KEGG.png)
+
+KEGG Dot Plot
 ![KEGG Dot Plot](plots/KEGG_dot.png)
+
+PCA
 ![PCA](plots/PCA.png)
 
 # DPSC-derived-neurons

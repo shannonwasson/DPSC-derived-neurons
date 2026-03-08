@@ -1,0 +1,110 @@
+---
+title: "Transcriptomic Analysis of ASD-Associated Signaling in Prader-Willi Syndrome Neurons"
+author: "Shannon Wasson"
+date: "`r.Sys.Date()`"
+output: html_document
+  toc: true
+  toc_float: true
+  number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1. Introduction
+Prader-Willi Syndrome (PWS) is a complex genetic disorder characterized by a range of physical, cognitive, and behavioral symptoms. One of the key features of PWS is its association with Autism Spectrum Disorder (ASD), which has been observed in a significant proportion of individuals with PWS. The underlying molecular mechanisms linking PWS and ASD remain poorly understood, but recent advances in transcriptomic analysis have provided new insights into the signaling pathways involved in these conditions.
+
+Understanding transcriptional differences associated with ASD phenotypes in PWS may help identify molecular pathways contributing to neurodevelopmental variation within the syndrome. In this analysis, RNA-seq data from iPSC-derived neurons were analyzed to identify transcriptional pathways associated with ASD phenotypes in PWS. The goal was to uncover potential molecular mechanisms that could explain the observed behavioral and cognitive differences in individuals with PWS who also exhibit ASD traits. The primary goal of this study was to perform differential expression and gene set enrichment analysis to identify biological pathways distnigushing between PWS_UPD_ASD and PWS_UPD_nonASD neurons.
+
+# 2. Data Source
+RNA sequencing data were obtained from GEO dataset (GSE178687)[https://www.omicsdi.org/dataset/geo/GSE178687].
+
+The dataset contains the  RNA-seq profiles of IPSC neurons from:
+* Neurotypical controls
+* PWS patients with maternal uniparental disomy (UPD) and ASD (PWS_UPD_ASD)
+* PWS patients with maternal uniparental disomy (UPD) without ASD (PWS_UPD_nonASD)
+* PWS patients with paternal deletion (DEL) and ASD (PWS_DEL_ASD)
+
+# 3. Methods
+
+## 3.1 Software
+The analysis was performed using R (version 4.2.0) and the following packages:
+* DESeq2 for differential expression analysis
+* clusterProfiler for gene set enrichment analysis
+* ggplot2 for data visualization
+
+## 3.2 Differential Expression Analysis
+The DESeq2 package was used to perform differential expression analysis between the PWS_UPD_ASD and PWS_UPD_nonASD groups. The analysis involved the following steps:
+1. Data normalization and variance stabilization
+2. Identification of differentially expressed genes (DEGs) using a significance threshold of adjusted p-value < 0.05 and log2 fold change > 1 or < -1
+
+## 3.3 Gene Set Enrichment Analysis
+Gene Set Enrichment Analysis (GSEA) was performed using KEGG pathway annotations.
+Genes were ranked by log2 fold change and converted to Entrez IDs prior to Analysis
+
+```{r}
+gsea_kegg <- gseKEGG(geneList = gene_list_filtered, 
+                 organism = "hsa", 
+                 pvalueCutoff = 0.1, 
+                 verbose = FALSE)
+)
+```
+
+# 4. Results
+
+## 4.1 Differential Expression Analysis
+Differential expressional analysis identified a total of 49 genes significantly associated with ASD status within the UPD background. 
+
+```{r}
+vsd <- vst(dds)
+plotPCA(vsd, intgroup = "group")
+```
+The PCA plot demonstrates clustering of samples according to genotype group.
+
+## 4.2 Volcano Plot
+```{r}
+
+
+EnhancedVolcano(results,
+                lab = rownames(results),
+                x = 'log2FoldChange',
+                y = 'pvalue'
+)
+```
+The volcano plot highlights the differentially expressed genes between the PWS_UPD_ASD and PWS_UPD_nonASD groups.
+## 4.3 KEGG Pathway Enrichment
+The KEGG GSEA pathway identified one significantly enriched pathway:
+**NF-kB signaling pathway** (NES =-1.74)
+Negative enrichment indicates coordinated downregulation of NF-kB pathway genes in UPD_ASD neurons.
+
+## 4.4 Core Enrichment Genes
+Leading-edge genes derived from enrichment signaling included (but not limited to):
+* IL1B
+* CXCL1
+* CXCL8
+* IRAK1
+* RELB
+These genes represent canonical components of inflammatory and stress-response signaling regulated by the NF-kB pathway.
+
+# 5. Interpretation
+NF-kB signaling is a key transcriptional pathway involved in immune response, cellular stress signaling, and neuronal plasticity. 
+
+Downreuglation of NF-kB pathway genes in ASD-associated PWS neurons suggests altered inflammatory or stress response transcriptional programs.
+
+Previous studies of austism spectrum disroder have reported dysregulation of immune and inflammatory signaling pathways,including cutokine signaling and chemokine signaling networks. 
+
+The coordinated reduction in NF-kB pathway activity observed here may reflect altered neuronal signaling or stress responsiveness rather than classical neuroinflammation.
+
+# 6. Limitations
+Several limitations should be considered when interpreting these results:
+1. Small sample size typical of iPSC-derived neuronal studies
+2. Bulk RNA-seq data prevents cell-type specific resolution
+3. KEGG pathway analsysis is dependent on precurated gene sets
+4. Further validation in independent cohorts and functional studies are needed to confirm the role of NF-kB signaling in ASD-associated phenotypes in PWS.
+
+# 7. Reproducability
+```{r}
+sessionInfo()
+```

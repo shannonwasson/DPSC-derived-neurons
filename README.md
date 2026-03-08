@@ -53,4 +53,7 @@ Results suggest reduced NF-kB transcriptional signaling in ASD-associated PWS ne
 **PCA**
 ![PCA](plots/PCA.png)
 
+**Heatmap**
+![Heatmap](plots/heatmap.png)
+
 # DPSC-derived-neurons

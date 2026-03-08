@@ -78,6 +78,13 @@ EnhancedVolcano(
 vsd <- vst(dds)
 plotPCA(vsd, intgroup = "group")
 
+# Heatmap
+library(pheatmap)
+top_genes <- head(order(res_asd_vs_noasd$padj), 30)
+mat <- assay(vsd)[top_genes, ]
+mat <- mat - rowMeans(mat)
+pheatmap(mat, annotation_col = metadata)
+
 # 6. Mitochondrial Gene Exploration
 
 res_df <- as.data.frame(res_del_vs_control)
